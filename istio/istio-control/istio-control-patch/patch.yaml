@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: istiod
   namespace: istio-system
+  annotations:
+    helm.sh/hook: post-install
 spec:
   template:
     spec:
