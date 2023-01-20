@@ -1,4 +1,5 @@
 resources:
 - ../../base/istio-system/istio-control
+- ./patch-istiod.yml
 patchesStrategicMerge:
 - istio-control.yaml
