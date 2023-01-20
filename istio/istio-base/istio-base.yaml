@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-gateway-bot
+  name: istio-base
   namespace: argocd
   labels:
     scope: system
