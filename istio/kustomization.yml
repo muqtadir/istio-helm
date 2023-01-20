@@ -1,6 +1,7 @@
 resources:
 - ./istio-base
 - ./istio-control
+- ./istio-gateways
 - ./istio-env-config.yml
 configurations:
 - kustomize-reference.yaml
