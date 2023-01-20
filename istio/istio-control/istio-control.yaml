@@ -463,7 +463,7 @@ spec:
           meshNetworks: {}
 
           # Use the user-specified, secret volume mounted key and certs for Pilot and workloads.
-          mountMtlsCerts: false
+          mountMtlsCerts: true
 
           multiCluster:
             # Set to true to connect two kubernetes clusters via their respective
