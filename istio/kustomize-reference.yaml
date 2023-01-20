@@ -1,0 +1,3 @@
+varReference:
+- kind: Application
+  path: spec/source/targetRevision

@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-control
+  namespace: argocd
+  labels:
+    scope: system
+spec:
+    targetRevision: "$(ISTIO_VERSION)"
+    helm:
+      valueFiles:
+      - values.yaml

@@ -1,0 +1,14 @@
+resources:
+- ./istio-base
+- ./istio-control
+- ./istio-env-config.yml
+configurations:
+- kustomize-reference.yaml
+vars:
+- name: ISTIO_VERSION
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: istio-env-config
+  fieldref:
+    fieldpath: data.ISTIO_VERSION

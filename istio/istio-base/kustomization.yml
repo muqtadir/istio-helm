@@ -1,0 +1,4 @@
+resources:
+- ../../base/istio-system/istio-base
+patchesStrategicMerge:
+- istio-base.yaml
