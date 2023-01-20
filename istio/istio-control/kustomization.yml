@@ -1,6 +1,6 @@
 resources:
 - ../../base/istio-system/istio-control
-- ./post-helm.yaml
+- ./istio-control-patch.yaml
 #- ./patch-istiod.yml
 patchesStrategicMerge:
 - istio-control.yaml

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-control-patch
+  namespace: argocd
+  labels:
+    scope: system
+  annotations:
+    helm.sh/hook: post-install
+spec:
+  destination:
+    namespace: istio-system
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: istio/istio-control/istio-control-patch
+    repoURL: https://github.com/muqtadir/istio-helm.git
+    targetRevision: HEAD
+  project: istio
+  syncPolicy:
+    automated: {}
