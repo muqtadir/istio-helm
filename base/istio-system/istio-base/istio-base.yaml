@@ -22,7 +22,7 @@ spec:
           - /webhooks/0/clientConfig/caBundle
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
-      name: istiod-istio-system
+      name: istiod-default-validator
       jsonPointers:
           - /webhooks/0/clientConfig/caBundle
           - /webhooks/0/failurePolicy
