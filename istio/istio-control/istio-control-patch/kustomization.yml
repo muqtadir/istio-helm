@@ -1,5 +1,2 @@
-patchesJson6902:
-- target:
-    kind: Deployment
-    name: istiod
-  path: patch.yaml
+patchesStrategicMerge:
+- ./patch.yaml

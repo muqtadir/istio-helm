@@ -5,8 +5,6 @@ metadata:
   namespace: argocd
   labels:
     scope: system
-  annotations:
-    helm.sh/hook: post-install
 spec:
   destination:
     namespace: istio-system
