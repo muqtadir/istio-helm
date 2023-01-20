@@ -4,7 +4,7 @@ resources:
 - ./istio-gateways
 - ./istio-env-config.yml
 - ./patch-istiod.yml
-- ./SecretProviderClass-istiod.yaml
+#- ./SecretProviderClass-istiod.yaml
 configurations:
 - kustomize-reference.yaml
 vars:
