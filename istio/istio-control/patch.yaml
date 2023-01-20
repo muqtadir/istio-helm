@@ -1,17 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: istiod
-  namespace: istio-system
-  annotations:
-    helm.sh/hook: post-install
-spec:
-  template:
-    spec:
-      volumes:
-      - name: cacerts
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "istio-mtls"
+- op: replace
+  path: /spec/template/spec/volumes/2
+  value:
+    name: cacerts
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: "istio-tls"
