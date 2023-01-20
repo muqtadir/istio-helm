@@ -13,7 +13,7 @@ spec:
   project: default
   source:
     path: istio
-    repoURL: https://github.com/muqtadir/istio.git
+    repoURL: https://github.com/muqtadir/istio-helm.git
     targetRevision: HEAD
   ignoreDifferences:
     - group: admissionregistration.k8s.io
