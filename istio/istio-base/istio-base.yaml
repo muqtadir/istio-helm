@@ -6,6 +6,7 @@ metadata:
   labels:
     scope: system
 spec:
+  source:
     targetRevision: "$(ISTIO_VERSION)"
     helm:
       valueFiles:
