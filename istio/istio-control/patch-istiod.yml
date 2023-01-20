@@ -11,12 +11,12 @@ spec:
        overlays:
          - kind: Deployment
            name: istiod # https://github.com/istio/istio/issues/31076
-           patches:
-             - path: spec.template.spec.volumes[name:cacerts]
-               value:
-                 name: cacerts
-                 csi:
-                   driver: secrets-store.csi.k8s.io
-                   readOnly: true
-                   volumeAttributes:
-                     secretProviderClass: "$(ISTIO_KV_NAME)-istiod-secret-provider"
+#           patches:
+#             - path: spec.template.spec.volumes[name:cacerts]
+#               value:
+#                 name: cacerts
+#                 csi:
+#                   driver: secrets-store.csi.k8s.io
+#                   readOnly: true
+#                   volumeAttributes:
+#                     secretProviderClass: "$(ISTIO_KV_NAME)-istiod-secret-provider"
