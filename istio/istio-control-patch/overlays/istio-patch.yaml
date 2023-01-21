@@ -9,6 +9,6 @@
       optional: true
       secretName: cacerts
 - op: replace
-  path: /spec/template/spec/containers/0/volumeMounts/3
+  path: /spec/template/spec/containers/0/volumeMounts/2
   value:
     name: cacerts-test
