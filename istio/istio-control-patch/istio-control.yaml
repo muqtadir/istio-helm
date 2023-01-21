@@ -10,15 +10,14 @@ spec:
     namespace: istio-system
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://istio-release.storage.googleapis.com/charts'
-    chart: istiod
-    targetRevision: "$(ISTIO_VERSION)"
-  plugin:
-    name: kustomized-helm
-    env:
-      - name: ARGOCD_ENV_HELM_ARGS
-        value: |
-          targetRevision: 1.16.1
+    repoURL: 'https://github.com/muqtadir/istio-helm.git'
+    path: istio/istio-control-patch
+    plugin:
+      name: kustomized-helm
+      env:
+        - name: ARGOCD_ENV_HELM_ARGS
+          value: |
+            targetRevision: 1.16.1
 
   ignoreDifferences:
     - group: admissionregistration.k8s.io
