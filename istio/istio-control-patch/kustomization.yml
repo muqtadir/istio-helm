@@ -10,4 +10,4 @@ patchesJson6902:
       version: v1
       kind: Deployment
       name: istiod
-    path: ./overlays/iistio-patch.yaml
+    path: ./overlays/istio-patch.yaml
