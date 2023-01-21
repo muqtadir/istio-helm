@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
 - ./all.yaml
 
-patchesxJson6902:
+patchesJson6902:
 - target:
     group: apps
     version: v1
