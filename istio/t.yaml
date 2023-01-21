@@ -1,0 +1,361 @@
+apiVersion: v1
+data:
+  AZURE_SUB_ID: be96ecf3-2257-45cb-a485-17fbe5801fb4
+  AZURE_TENANT_ID: 7d1f4f5f-8f63-48d8-86e1-8b8f63f16bae
+  CLUSTER_NAME: eus1-plat-devqa
+  ISTIO_KV_NAME: sep-eus1-lower-mcp-kv
+  ISTIO_VERSION: 1.16.1
+  KEYVAULT_RG: sep-eus1-lower-infracore-rg
+  MESH_ID: mcp
+  NETWORK_NAME: eus1-le-sephora
+  NLB_IP: 10.187.105.103
+  NLB_SUBNET: msvc-aks-devqa-plat-nlb
+  ZIPKIN_ADDRESS: jaeger-collector.tracing.svc:9411
+kind: ConfigMap
+metadata:
+  name: istio-env-config
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    scope: system
+  name: istio-base
+  namespace: argocd
+spec:
+  destination:
+    namespace: istio-system
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    kind: MutatingWebhookConfiguration
+    name: istio-sidecar-injector
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    - /webhooks/0/failurePolicy
+    kind: ValidatingWebhookConfiguration
+    name: istiod-default-validator
+  project: istio
+  source:
+    chart: base
+    helm:
+      values: |
+        global:
+
+          # ImagePullSecrets for control plane ServiceAccount, list of secrets in the same namespace
+          # to use for pulling any images in pods that reference this ServiceAccount.
+          # Must be set for any cluster configured with private docker registry.
+          imagePullSecrets: []
+
+          # Used to locate istiod.
+          istioNamespace: istio-system
+
+          istiod:
+            enableAnalysis: false
+
+          configValidation: true
+          externalIstiod: false
+          remotePilotAddress: ""
+
+        base:
+          # Used for helm2 to add the CRDs to templates.
+          enableCRDTemplates: false
+
+          # Validation webhook configuration url
+          # For example: https://$remotePilotAddress:15017/validate
+          validationURL: ""
+
+          # For istioctl usage to disable istio config crds in base
+          enableIstioConfigCRDs: true
+
+        defaultRevision: "default"
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.16.1
+  syncPolicy:
+    automated: {}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    scope: system
+  name: istio-control
+  namespace: argocd
+spec:
+  destination:
+    namespace: istio-system
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    kind: MutatingWebhookConfiguration
+    name: istio-sidecar-injector
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    - /webhooks/0/failurePolicy
+    kind: ValidatingWebhookConfiguration
+    name: istiod-istio-system
+  plugin:
+    env:
+    - name: HELM_VALUES
+      value: |
+        targetRevision: {{ .Values.spec.source.targetRevision }}
+    name: kustomized-helm
+  project: istio
+  source:
+    chart: istiod
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.16.1
+  syncPolicy:
+    automated: {}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    scope: system
+  name: istio-gateway
+  namespace: argocd
+spec:
+  destination:
+    namespace: istio-gateway
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    kind: MutatingWebhookConfiguration
+    name: istio-sidecar-injector
+  - group: admissionregistration.k8s.io
+    jsonPointers:
+    - /webhooks/0/clientConfig/caBundle
+    - /webhooks/0/failurePolicy
+    kind: ValidatingWebhookConfiguration
+    name: istiod-istio-system
+  project: istio
+  source:
+    chart: gateway
+    helm:
+      values: |
+        # Name allows overriding the release name. Generally this should not be set
+        name: "istio-ingress"
+        # revision declares which revision this gateway is a part of
+        revision: ""
+
+        replicaCount: 1
+
+        kind: Deployment
+
+        rbac:
+          # If enabled, roles will be created to enable accessing certificates from Gateways. This is not needed
+          # when using http://gateway-api.org/.
+          enabled: true
+
+        serviceAccount:
+          # If set, a service account will be created. Otherwise, the default is used
+          create: true
+          # Annotations to add to the service account
+          annotations: {}
+          # The name of the service account to use.
+          # If not set, the release name is used
+          name: ""
+
+        podAnnotations:
+          prometheus.io/port: "15020"
+          prometheus.io/scrape: "true"
+          prometheus.io/path: "/stats/prometheus"
+          inject.istio.io/templates: "gateway"
+          sidecar.istio.io/inject: "true"
+
+        # Define the security context for the pod.
+        # If unset, this will be automatically set to the minimum privileges required to bind to port 80 and 443.
+        # On Kubernetes 1.22+, this only requires the `net.ipv4.ip_unprivileged_port_start` sysctl.
+        securityContext: ~
+        containerSecurityContext: ~
+
+        service:
+          # Type of service. Set to "None" to disable the service entirely
+          type: LoadBalancer
+          ports:
+          - name: status-port
+            port: 15021
+            protocol: TCP
+            targetPort: 15021
+          - name: http2
+            port: 80
+            protocol: TCP
+            targetPort: 80
+          - name: https
+            port: 443
+            protocol: TCP
+            targetPort: 443
+          annotations: {}
+          loadBalancerIP: ""
+          loadBalancerSourceRanges: []
+          externalTrafficPolicy: ""
+          externalIPs: []
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+
+        autoscaling:
+          enabled: true
+          minReplicas: 1
+          maxReplicas: 5
+          targetCPUUtilizationPercentage: 80
+
+        # Pod environment variables
+        env: {}
+
+        # Labels to apply to all resources
+        labels:
+          istio: istio-ingress
+
+        # Annotations to apply to all resources
+        annotations: {}
+
+        nodeSelector: {}
+
+        tolerations: []
+
+        topologySpreadConstraints: []
+
+        affinity: {}
+
+        # If specified, the gateway will act as a network gateway for the given network.
+        networkGateway: ""
+
+        imagePullSecrets: []
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.16.1
+  syncPolicy:
+    automated: {}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    scope: system
+  name: istio-gateway-bot
+  namespace: argocd
+spec:
+  destination:
+    namespace: istio-gateway
+    server: https://kubernetes.default.svc
+  project: istio
+  source:
+    chart: gateway
+    helm:
+      values: |
+        # Name allows overriding the release name. Generally this should not be set
+        name: "istio-bot"
+        # revision declares which revision this gateway is a part of
+        revision: ""
+
+        replicaCount: 1
+
+        kind: Deployment
+
+        rbac:
+          # If enabled, roles will be created to enable accessing certificates from Gateways. This is not needed
+          # when using http://gateway-api.org/.
+          enabled: true
+
+        serviceAccount:
+          # If set, a service account will be created. Otherwise, the default is used
+          create: true
+          # Annotations to add to the service account
+          annotations: {}
+          # The name of the service account to use.
+          # If not set, the release name is used
+          name: ""
+
+        podAnnotations:
+          prometheus.io/port: "15020"
+          prometheus.io/scrape: "true"
+          prometheus.io/path: "/stats/prometheus"
+          inject.istio.io/templates: "gateway"
+          sidecar.istio.io/inject: "true"
+
+        # Define the security context for the pod.
+        # If unset, this will be automatically set to the minimum privileges required to bind to port 80 and 443.
+        # On Kubernetes 1.22+, this only requires the `net.ipv4.ip_unprivileged_port_start` sysctl.
+        securityContext: ~
+        containerSecurityContext: ~
+
+        service:
+          # Type of service. Set to "None" to disable the service entirely
+          type: LoadBalancer
+          ports:
+          - name: status-port
+            port: 15021
+            protocol: TCP
+            targetPort: 15021
+          - name: http2
+            port: 8080
+            protocol: TCP
+            targetPort: 80
+          - name: https
+            port: 8443
+            protocol: TCP
+            targetPort: 443
+          annotations: {}
+          loadBalancerIP: ""
+          loadBalancerSourceRanges: []
+          externalTrafficPolicy: ""
+          externalIPs: []
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+
+        autoscaling:
+          enabled: true
+          minReplicas: 1
+          maxReplicas: 5
+          targetCPUUtilizationPercentage: 80
+
+        # Pod environment variables
+        env: {}
+
+        # Labels to apply to all resources
+        labels:
+          istio: istio-bot
+
+        # Annotations to apply to all resources
+        annotations: {}
+
+        nodeSelector: {}
+
+        tolerations: []
+
+        topologySpreadConstraints: []
+
+        affinity: {}
+
+        # If specified, the gateway will act as a network gateway for the given network.
+        networkGateway: ""
+
+        imagePullSecrets: []
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.16.1
+  syncPolicy:
+    automated: {}

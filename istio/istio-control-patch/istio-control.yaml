@@ -12,13 +12,13 @@ spec:
   source:
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
     chart: istiod
-  targetRevision: "$(ISTIO_VERSION)"
+    targetRevision: "$(ISTIO_VERSION)"
   plugin:
     name: kustomized-helm
     env:
       - name: HELM_VALUES
         value: |
-          targetRevision: {{ .Values.spec.source.targetRevision }}
+          targetRevision: 1.16.1
 
   ignoreDifferences:
     - group: admissionregistration.k8s.io
