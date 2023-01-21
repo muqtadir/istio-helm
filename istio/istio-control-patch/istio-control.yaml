@@ -15,7 +15,7 @@ spec:
     plugin:
       name: kustomized-helm
       env:
-        - name: ARGOCD_ENV_HELM_ARGS
+        - name: HELM_ARGS
           value: "--set targetRevision=1.16.1 --set namespace=istio-system --name-template=istiod"
   project: istio
   syncPolicy:
