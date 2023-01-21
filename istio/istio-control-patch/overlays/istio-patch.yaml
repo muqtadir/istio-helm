@@ -12,4 +12,3 @@
   path: /spec/template/spec/containers/0/volumeMounts/3
   value:
     name: cacerts-test
-    mountPath: /etc/cacerts
