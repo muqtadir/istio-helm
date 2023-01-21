@@ -8,7 +8,7 @@
       defaultMode: 420
       optional: true
       secretName: cacerts
-- op: replace      
-  path: /spec/template/spec/containers/volumeMounts/3
-  value:
-    name: cacerts-test
+#- op: replace
+#  path: /spec/template/spec/containers/volumeMounts/3
+#  value:
+#    name: cacerts-test
