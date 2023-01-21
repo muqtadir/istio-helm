@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ./istio-control.yaml
-  - all.yaml
 
 patchesJson6902:
   - target:
