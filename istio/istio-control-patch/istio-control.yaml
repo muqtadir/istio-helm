@@ -11,28 +11,13 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://github.com/muqtadir/istio-helm.git'
-    chart: istiod
-    targetRevision: "1.16.1"
-  path: plugins/kustomized-helm
-  plugin:
-    name: kustomized-helm
-    env:
-      - name: ARGOCD_ENV_HELM_ARGS
-        value: |
-          targetRevision: 1.16.1
-
-  ignoreDifferences:
-    - group: admissionregistration.k8s.io
-      kind: MutatingWebhookConfiguration
-      name: istio-sidecar-injector
-      jsonPointers:
-          - /webhooks/0/clientConfig/caBundle
-    - group: admissionregistration.k8s.io
-      kind: ValidatingWebhookConfiguration
-      name: istiod-istio-system
-      jsonPointers:
-          - /webhooks/0/clientConfig/caBundle
-          - /webhooks/0/failurePolicy
+    path: istio/istio-control-patch
+    plugin:
+      name: kustomized-helm
+      env:
+        - name: ARGOCD_ENV_HELM_ARGS
+          value: |
+            targetRevision: 1.16.1
   project: istio
   syncPolicy:
     automated: {}
