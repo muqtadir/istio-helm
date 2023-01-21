@@ -3,8 +3,14 @@
 #  path: /spec/template/spec/volumes[name:cacerts]
   path: /spec/template/spec/volumes/2
   value:
-    name: cacerts
+    name: cacerts-test
     secret:
       defaultMode: 420
       optional: true
       secretName: cacerts
+- op: replace
+  path: /spec/template/spec/containers/0/volumeMounts/2
+  value:
+    name: cacerts-test
+    mountPath: /etc/cacerts
+    readOnly: true
