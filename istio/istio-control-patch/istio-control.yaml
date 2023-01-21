@@ -16,12 +16,7 @@ spec:
       name: kustomized-helm
       env:
         - name: ARGOCD_ENV_HELM_ARGS
-          value: |
-            targetRevision: 1.16.1
-        - name: ARGOCD_APP_NAME
-          value: istiod
-        - name: ARGOCD_APP_NAMESPACE
-          value: istio-system          
+          value: "--set targetRevision=1.16.1 --set namespace=istio-system --name-template=istiod"
   project: istio
   syncPolicy:
     automated: {}
