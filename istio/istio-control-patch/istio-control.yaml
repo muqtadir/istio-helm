@@ -16,7 +16,7 @@ spec:
   plugin:
     name: kustomized-helm
     env:
-      - name: HELM_VALUES
+      - name: ARGOCD_ENV_HELM_ARGS
         value: |
           targetRevision: 1.16.1
 
