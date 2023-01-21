@@ -9712,7 +9712,7 @@ data:
         args: ["helm dependency build || true"]
       generate:
         command: ["/bin/sh", "-c"]
-        args: ["helm template . $HELM_ARGS  --include-crds > all.yaml && kustomize build"]
+        args: ["helm template . --set targetRevision=1.16.1 --set namespace=istio-system --name-template=istiod  --include-crds > all.yaml && kustomize build"]
 ---
 apiVersion: v1
 kind: ConfigMap
