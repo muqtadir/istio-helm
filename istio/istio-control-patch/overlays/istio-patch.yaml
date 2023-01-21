@@ -9,6 +9,8 @@
       optional: true
       secretName: cacerts
 - op: replace
-  path: /spec/template/spec/containers/0/volumeMounts/2
+  path: /spec/template/spec/containers/0/volumeMounts/3
   value:
     name: cacerts-test
+    mountPath: /etc/cacerts
+    readOnly: true
