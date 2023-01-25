@@ -16,7 +16,7 @@ spec:
       name: kustomized-helm
       env:
         - name: HELM_ARGS
-          value: "--set targetRevision=1.16.1 --set namespace=istio-system --name-template=istiod"
+          value: "--targetRevision=1.16.1 --namespace=istio-system --name-template=istiod"
   project: istio
   syncPolicy:
     automated: {}

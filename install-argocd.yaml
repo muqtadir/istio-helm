@@ -9712,7 +9712,7 @@ data:
         args: ["helm dependency build || true"]
       generate:
         command: ["/bin/sh", "-c"]
-        args: ["helm template . $HELM_ARGS > all.yaml && kustomize build"]
+        args: ["helm template . --namespace=$ARGOCD_APP_NAMESPACE > all.yaml && kustomize build"]
 ---
 apiVersion: v1
 kind: ConfigMap
