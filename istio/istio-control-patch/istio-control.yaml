@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-control
+  name: istio-control-ptatch
   namespace: argocd
   labels:
     scope: system
