@@ -1,2 +1,3 @@
 resources:
 - ./istio-base.yaml
+- ../istio-kustomization

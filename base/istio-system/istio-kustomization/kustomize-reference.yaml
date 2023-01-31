@@ -1,0 +1,12 @@
+varReference:
+- kind: Application
+  path: spec/source/targetRevision
+- kind: SecretProviderClass
+  path: metadata
+- kind: SecretProviderClass
+  path: spec/parameters
+- kind: SecretProviderClass
+  path: spec/secretObjects/data/objectName
+- kind: IstioOperator
+  path: spec/components/pilot/k8s/overlays[]/patches[]/value/csi/volumeAttributes/secretProviderClass
+  #patches[1]/value/csi/volumeAttributes/secretProviderClass

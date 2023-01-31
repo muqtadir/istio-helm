@@ -1,0 +1,45 @@
+configurations:
+- kustomize-reference.yaml
+vars:
+  - name: ISTIO_VERSION
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.ISTIO_VERSION
+  - name: CLUSTER_NAME
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.CLUSTER_NAME
+  - name: ISTIO_KV_NAME
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.ISTIO_KV_NAME
+  - name: KEYVAULT_RG
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.KEYVAULT_RG
+  - name: AZURE_SUB_ID
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.AZURE_SUB_ID
+  - name: AZURE_TENANT_ID
+    objref:
+      apiVersion: v1
+      kind: ConfigMap
+      name: istio-env-config
+    fieldref:
+      fieldpath: data.AZURE_TENANT_ID

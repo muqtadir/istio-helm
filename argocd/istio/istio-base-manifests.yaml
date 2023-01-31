@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: istio
   source:
-    path: istio
+    path: istio/istio-base
     repoURL: https://github.com/muqtadir/istio-helm.git
     targetRevision: HEAD
   ignoreDifferences:

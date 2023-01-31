@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  ISTIO_VERSION: 1.16.1
+  MESH_ID: mcp
+  CLUSTER_NAME: eus1-plat-devqa
+  NETWORK_NAME: eus1-le-sephora
+  NLB_SUBNET: msvc-aks-devqa-plat-nlb
+  NLB_IP: 10.187.105.103
+  ISTIO_KV_NAME: sep-eus1-lower-mcp-kv
+  KEYVAULT_RG: sep-eus1-lower-infracore-rg
+  AZURE_SUB_ID: be96ecf3-2257-45cb-a485-17fbe5801fb4
+  AZURE_TENANT_ID: 7d1f4f5f-8f63-48d8-86e1-8b8f63f16bae
+  ZIPKIN_ADDRESS: jaeger-collector.tracing.svc:9411
+kind: ConfigMap
+metadata:
+  name: istio-env-config
