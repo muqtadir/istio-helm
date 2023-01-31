@@ -1,0 +1,37 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-gateway-manifests
+  namespace: argocd
+  labels:
+    scope: system
+spec:
+  destination:
+    namespace: istio-system
+    server: https://kubernetes.default.svc
+  project: istio
+  source:
+    path: istio/istio-gateways
+    repoURL: https://github.com/muqtadir/istio-helm.git
+    targetRevision: HEAD
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      name: istio-sidecar-injector
+      jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istiod-istio-system
+      jsonPointers:
+          - /webhooks/0/clientConfig/caBundle
+          - /webhooks/0/failurePolicy
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istiod-default-validator
+      jsonPointers:
+          - /webhooks/0/failurePolicy
+  syncPolicy:
+    automated:
+      prune: true
