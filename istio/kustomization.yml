@@ -1,6 +1,6 @@
 resources:
 - ./istio-base
-- ./istio-control-patch
+#- ./istio-control-patch
 - ./istio-gateways
 - ./istio-env-config.yml
 #- ./SecretProviderClass-istiod.yaml
