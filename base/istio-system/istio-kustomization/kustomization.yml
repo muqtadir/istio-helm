@@ -1,3 +1,5 @@
+resources:
+- ./istio-env-config.yml
 configurations:
 - kustomize-reference.yaml
 vars:

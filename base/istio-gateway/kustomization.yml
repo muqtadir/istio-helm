@@ -1,2 +1,3 @@
 resources:
+- ../istio-kustomization  
 - istio-gateway.yaml
