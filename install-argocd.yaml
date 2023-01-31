@@ -9697,6 +9697,28 @@ subjects:
   name: argocd-server
   namespace: argocd
 ---
+#apiVersion: argoproj.io/v1alpha1
+#kind: ConfigManagementPlugin
+#metadata:
+#  name: cmp-plugin
+#spec:
+#  version: v1.0
+#  init:
+    # Init always happens immediately before generate, but its output is not treated as manifests.
+    # This is a good place to, for example, download chart dependencies.
+#    command: [sh, -c, 'helm dependency build || true']
+#  generate:
+#    command: [sh, -c]
+#    args:
+#      - |
+#        helm template . --namespace=$ARGOCD_APP_NAMESPACE  > all.yaml && kustomize build"
+  # The discovery config is applied to a repository. If every configured discovery tool matches, then the plugin may be
+  # used to generate manifests for Applications using the repository.
+  # Only one of fileName, find.glob, or find.command should be specified. If multiple are specified then only the
+  # first (in that order) is evaluated.
+#  discover:
+#    fileName: "./subdir/s*.yaml"
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9712,7 +9734,7 @@ data:
         args: ["helm dependency build || true"]
       generate:
         command: ["/bin/sh", "-c"]
-        args: ["helm template . --namespace=$ARGOCD_APP_NAMESPACE  > all.yaml && kustomize build"]
+        args: ["helm template . --release-name test  > all.yaml && kustomize build"]
 ---
 apiVersion: v1
 kind: ConfigMap
