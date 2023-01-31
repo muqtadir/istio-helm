@@ -3,8 +3,8 @@ resources:
 #- ./patch-istiod.yml
 patchesStrategicMerge:
 - istio-control.yaml
-patchesJson6902:
-- target:
-    kind: Deployment
-    name: istiod
-  path: patch.yaml
+#patchesJson6902:
+#- target:
+#    kind: Deployment
+#    name: istiod
+#  path: patch.yaml
