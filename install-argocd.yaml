@@ -9705,14 +9705,14 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-cm
 data:
-  configManagementPlugins: |
-    - name: kustomized-helm
-      init:
-        command: ["/bin/sh", "-c"]
-        args: ["helm dependency build || true"]
-      generate:
-        command: ["/bin/sh", "-c"]
-        args: ["helm template . --namespace=$ARGOCD_APP_NAMESPACE > all.yaml && kustomize build"]
+#  configManagementPlugins: |
+#    - name: kustomized-helm
+#      init:
+#        command: ["/bin/sh", "-c"]
+#        args: ["helm dependency build || true"]
+#      generate:
+#        command: ["/bin/sh", "-c"]
+#        args: ["helm template . --namespace=$ARGOCD_APP_NAMESPACE --set image.tag=$ARGOCD_APP_SOURCE_TARGET_REVISION > all.yaml && kustomize build"]
 ---
 apiVersion: v1
 kind: ConfigMap
