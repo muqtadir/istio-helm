@@ -8,7 +8,7 @@ metadata:
     scope: system
 spec:
   destination:
-    namespace: istio-system
+    namespace: istio-gateway
     server: https://kubernetes.default.svc
   project: istio
   source:
