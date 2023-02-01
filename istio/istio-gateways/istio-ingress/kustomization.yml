@@ -1,4 +1,3 @@
 resources:
-- ../../../base/istio-gateway
-patchesStrategicMerge:
+- ../../../base/istio-system/istio-kustomization
 - istio-gateway.yaml

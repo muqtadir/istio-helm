@@ -6,7 +6,6 @@ metadata:
   labels:
     scope: system
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
 spec:
   destination:
     namespace: istio-system
