@@ -13,8 +13,8 @@ spec:
   project: istio
   source:
     path: istio/istio-control/
-    plugin:
-      name: kustomized-helm
+    #plugin:
+    #  name: kustomized-helm
     repoURL: https://github.com/muqtadir/istio-helm.git
     targetRevision: HEAD
   ignoreDifferences:
