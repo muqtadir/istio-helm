@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: istio
   source:
-    path: istio/istio-control-patch/
+    path: istio/istio-control/
     plugin:
       name: kustomized-helm
     repoURL: https://github.com/muqtadir/istio-helm.git
